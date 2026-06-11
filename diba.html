@@ -595,9 +595,12 @@
       setTimeout(() => {
         const vW = window.innerWidth, vH = window.innerHeight;
         const bW = btn.offsetWidth || 200, bH = btn.offsetHeight || 54;
-        const margin = 8;
-        btn.style.left = (Math.random() * Math.max(0, vW - bW - margin * 2) + margin) + 'px';
-        btn.style.top  = (Math.random() * Math.max(0, vH - bH - margin * 2) + margin) + 'px';
+        const areaW = Math.min(vW, 980);
+        const areaH = Math.min(vH, 720);
+        const offX = (vW - areaW) / 2;
+        const offY = (vH - areaH) / 2;
+        btn.style.left = (offX + Math.random() * Math.max(0, areaW - bW)) + 'px';
+        btn.style.top  = (offY + Math.random() * Math.max(0, areaH - bH)) + 'px';
         msgEl.textContent = allMessages[attempt % allMessages.length];
         attempt++;
         if (attempt > 400) {
