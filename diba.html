@@ -66,6 +66,7 @@
       z-index: 1;
       box-shadow: 0 8px 40px rgba(194,24,91,0.12);
       text-align: center;
+      overflow: hidden;
     }
 
     .hearts {
@@ -142,7 +143,7 @@
       -webkit-tap-highlight-color: transparent;
     }
     .btn-no:hover { background: #fff; }
-    .btn-no.escaped { position: fixed; z-index: 999; }
+    .btn-no.escaped { position: absolute; z-index: 999; }
 
     .no-ghost {
       display: none;
@@ -578,12 +579,16 @@
       if (moving) return;
       moving = true;
 
+      const card = document.querySelector('.card-wrap');
+
       if (!escaped) {
-        const rect = btn.getBoundingClientRect();
-        btn.style.left  = rect.left + 'px';
-        btn.style.top   = rect.top + 'px';
-        btn.style.width = rect.width + 'px';
+        const btnRect  = btn.getBoundingClientRect();
+        const cardRect = card.getBoundingClientRect();
+        btn.style.left  = (btnRect.left - cardRect.left) + 'px';
+        btn.style.top   = (btnRect.top  - cardRect.top)  + 'px';
+        btn.style.width = btnRect.width + 'px';
         btn.classList.add('escaped');
+        card.appendChild(btn);
         ghost.style.display = 'block';
         escaped = true;
       }
@@ -593,14 +598,10 @@
       btn.classList.add(attempt > 200 ? 'panic' : 'wiggle');
 
       setTimeout(() => {
-        const vW = window.innerWidth, vH = window.innerHeight;
+        const cW = card.offsetWidth, cH = card.offsetHeight;
         const bW = btn.offsetWidth || 200, bH = btn.offsetHeight || 54;
-        const areaW = Math.min(vW, 980);
-        const areaH = Math.min(vH, 720);
-        const offX = (vW - areaW) / 2;
-        const offY = (vH - areaH) / 2;
-        btn.style.left = (offX + Math.random() * Math.max(0, areaW - bW)) + 'px';
-        btn.style.top  = (offY + Math.random() * Math.max(0, areaH - bH)) + 'px';
+        btn.style.left = (Math.random() * Math.max(0, cW - bW)) + 'px';
+        btn.style.top  = (Math.random() * Math.max(0, cH - bH)) + 'px';
         msgEl.textContent = allMessages[attempt % allMessages.length];
         attempt++;
         if (attempt > 400) {
