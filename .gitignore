@@ -1,0 +1,8 @@
+node_modules/
+ham-otaqi/
+hamotaqi-presentation.js
+hamotaqi-presentation.pptx
+package.json
+package-lock.json
+fix-authors.ps1
+.claude/
